@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- Lock screen: replace Odoo logo with POS brand logo when available -->
+    <t t-inherit="point_of_sale.LockScreen" t-inherit-mode="extension">
+        <xpath expr="//img[contains(@class, 'pos-lock-logo') or contains(@src, 'odoo_logo')]" position="replace">
+            <img t-if="brandLogo"
+                 t-att-src="brandLogo"
+                 class="pos-lock-logo"/>
+        </xpath>
+    </t>
+
+    <!-- POS header: use POS brand logo instead of default Odoo logo -->
+    <t t-inherit="point_of_sale.Header" t-inherit-mode="extension">
+        <xpath expr="//img[contains(@class, 'pos-header-logo') or contains(@src, 'odoo_logo')]" position="replace">
+            <img t-if="brandLogo"
+                 t-att-src="brandLogo"
+                 class="pos-header-logo"/>
+        </xpath>
+    </t>
+
+    <!-- Customer display: use POS brand logo and hide 'Powered by Odoo' text -->
+    <t t-inherit="point_of_sale.CustomerDisplayScreen" t-inherit-mode="extension">
+        <xpath expr="//img[contains(@class, 'pos-customer-logo') or contains(@src, 'odoo_logo')]" position="replace">
+            <img t-if="brandLogo"
+                 t-att-src="brandLogo"
+                 class="pos-customer-logo"/>
+        </xpath>
+        <xpath expr="//p[contains(., 'Powered by Odoo')]" position="replace">
+            <p t-if="false"/>
+        </xpath>
+    </t>
+
+</templates>
+
