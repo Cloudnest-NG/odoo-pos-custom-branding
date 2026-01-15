@@ -43,7 +43,7 @@
         'views/pos_config_views.xml'
     ],
     'assets': {
-        'point_of_sale._assets_pos': [
+         "point_of_sale.assets": [
             'odoo_pos_custom_branding/static/src/js/receipt_design.js',
             'odoo_pos_custom_branding/static/src/js/pos_branding.js',
             'odoo_pos_custom_branding/static/src/xml/order_receipt.xml',
