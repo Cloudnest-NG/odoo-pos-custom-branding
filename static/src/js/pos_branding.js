@@ -69,31 +69,4 @@ import { useService } from "@web/core/utils/hooks";
         console.warn("Could not patch Navbar:", e);
     }
 
-    // Customer screen logo / branding
-    try {
-        const { CustomerDisplay } = await import(
-            "@point_of_sale/customer_display/customer_display"
-        );
-
-        patch(CustomerDisplay.prototype, {
-            setup() {
-                super.setup(...arguments);
-                this.pos = useService("pos");
-            },
-            get brandLogo() {
-                const config = this.pos?.config || {};
-                if (config.hide_odoo_branding && !config.pos_brand_logo) {
-                    return false;
-                }
-                const logo = config.pos_brand_logo || config.logo;
-                if (logo) {
-                    return `data:image/png;base64,${logo}`;
-                }
-                return false;
-            },
-        });
-    } catch (e) {
-        // Customer display is optional; ignore if not available.
-        console.warn("Could not patch CustomerDisplay:", e);
-    }
 })();

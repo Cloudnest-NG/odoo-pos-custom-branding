@@ -44,10 +44,15 @@
     ],
     'assets': {
         'point_of_sale._assets_pos': [
-            'odoo-pos-custom-branding/static/src/js/receipt_design.js',
-            'odoo-pos-custom-branding/static/src/js/pos_branding.js',
-            'odoo-pos-custom-branding/static/src/xml/order_receipt.xml',
-            'odoo-pos-custom-branding/static/src/xml/pos_branding.xml',
+            'odoo_pos_custom_branding/static/src/js/receipt_design.js',
+            'odoo_pos_custom_branding/static/src/js/pos_branding.js',
+            'odoo_pos_custom_branding/static/src/xml/order_receipt.xml',
+            'odoo_pos_custom_branding/static/src/xml/pos_branding.xml',
+        ],
+        # Customer display has separate asset bundle
+        'point_of_sale.customer_display_assets': [
+            'odoo_pos_custom_branding/static/src/js/customer_display_branding.js',
+            'odoo_pos_custom_branding/static/src/xml/customer_display_branding.xml',
         ],
     },
     'images': ['static/description/banner.png'],
