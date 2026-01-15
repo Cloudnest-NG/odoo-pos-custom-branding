@@ -1,4 +1,4 @@
-## Module <odoo_pos_custom_branding>
+## Module <odoo-pos-custom-branding>
 
 #### 30.10.2024
 #### Version 18.0.1.0.0

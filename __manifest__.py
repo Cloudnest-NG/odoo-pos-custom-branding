@@ -43,11 +43,11 @@
         'views/pos_config_views.xml'
     ],
     'assets': {
-         "point_of_sale.assets": [
-            'odoo_pos_custom_branding/static/src/js/receipt_design.js',
-            'odoo_pos_custom_branding/static/src/js/pos_branding.js',
-            'odoo_pos_custom_branding/static/src/xml/order_receipt.xml',
-            'odoo_pos_custom_branding/static/src/xml/pos_branding.xml',
+        'point_of_sale._assets_pos': [
+            'odoo-pos-custom-branding/static/src/js/receipt_design.js',
+            'odoo-pos-custom-branding/static/src/js/pos_branding.js',
+            'odoo-pos-custom-branding/static/src/xml/order_receipt.xml',
+            'odoo-pos-custom-branding/static/src/xml/pos_branding.xml',
         ],
     },
     'images': ['static/description/banner.png'],
