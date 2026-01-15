@@ -24,12 +24,29 @@ import { useService } from "@web/core/utils/hooks";
              * - Returns false to hide logo if hide_odoo_branding is enabled and no custom logo
              */
             get brandLogo() {
+                // Try multiple ways to access config (Odoo 18 compatibility)
                 const config = this.pos?.config || {};
+                const envConfig = this.env?.services?.pos?.config || {};
+                
+                // Console logging for debugging
+                console.log("[SaverScreen] Config access:", {
+                    hasPos: !!this.pos,
+                    hasConfig: !!this.pos?.config,
+                    hasEnvServices: !!this.env?.services?.pos?.config,
+                    configKeys: Object.keys(config),
+                    hideBranding: config.hide_odoo_branding,
+                    hasBrandLogo: !!config.pos_brand_logo,
+                    hasLogo: !!config.logo,
+                });
+                
                 if (config.hide_odoo_branding && !config.pos_brand_logo) {
                     // Explicitly hide Odoo branding if requested and no custom logo is set
                     return false;
                 }
-                const logo = config.pos_brand_logo || config.logo;
+                
+                // Try custom brand logo first, then regular logo, then env fallback
+                let logo = config.pos_brand_logo || config.logo || envConfig.logo;
+                
                 // Format binary data as data URI for use in img src
                 if (logo) {
                     return `data:image/png;base64,${logo}`;
@@ -53,11 +70,28 @@ import { useService } from "@web/core/utils/hooks";
                 // this.pos is already set by usePos() in the original setup, no need to set it again
             },
             get brandLogo() {
+                // Try multiple ways to access config (Odoo 18 compatibility)
                 const config = this.pos?.config || {};
+                const envConfig = this.env?.services?.pos?.config || {};
+                
+                // Console logging for debugging
+                console.log("[Navbar] Config access:", {
+                    hasPos: !!this.pos,
+                    hasConfig: !!this.pos?.config,
+                    hasEnvServices: !!this.env?.services?.pos?.config,
+                    configKeys: Object.keys(config),
+                    hideBranding: config.hide_odoo_branding,
+                    hasBrandLogo: !!config.pos_brand_logo,
+                    hasLogo: !!config.logo,
+                });
+                
                 if (config.hide_odoo_branding && !config.pos_brand_logo) {
                     return false;
                 }
-                const logo = config.pos_brand_logo || config.logo;
+                
+                // Try custom brand logo first, then regular logo, then env fallback
+                let logo = config.pos_brand_logo || config.logo || envConfig.logo;
+                
                 if (logo) {
                     return `data:image/png;base64,${logo}`;
                 }
