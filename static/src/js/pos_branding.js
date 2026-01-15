@@ -3,22 +3,23 @@
 import { patch } from "@web/core/utils/patch";
 import { useService } from "@web/core/utils/hooks";
 
-// Lock screen logo / branding
+// Saver screen logo / branding (sleep mode screensaver)
 try {
-    // Odoo 18 POS lock screen component (name may differ slightly between minor versions)
-    const { LockScreen } = await import(
-        "@point_of_sale/app/screens/lock_screen/lock_screen"
+    // Odoo 18 POS saver screen component (sleep mode/screensaver)
+    const { SaverScreen } = await import(
+        "@point_of_sale/app/screens/saver_screen/saver_screen"
     );
 
-    patch(LockScreen.prototype, {
+    patch(SaverScreen.prototype, {
         setup() {
             super.setup(...arguments);
             this.pos = useService("pos");
         },
         /**
-         * Returns the logo that should be displayed on the lock screen.
-         * - Custom POS logo if configured
-         * - Otherwise, fallback to the standard Odoo behaviour
+         * Returns the logo that should be displayed on the saver screen (sleep mode).
+         * - Custom POS logo if configured in pos_brand_logo
+         * - Falls back to company logo if no custom logo
+         * - Returns false to hide logo if hide_odoo_branding is enabled and no custom logo
          */
         get brandLogo() {
             const config = this.pos?.config || {};
@@ -35,7 +36,7 @@ try {
         },
     });
 } catch (e) {
-    // If the import path changes between versions, we simply skip the patch.
+    console.warn("Could not patch SaverScreen:", e);
 }
 
 // POS header logo / branding

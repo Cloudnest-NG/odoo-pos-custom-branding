@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates id="template" xml:space="preserve">
 
-    <!-- Lock screen: replace Odoo logo with POS brand logo when available -->
-    <t t-inherit="point_of_sale.LockScreen" t-inherit-mode="extension">
-        <xpath expr="//img[contains(@class, 'pos-lock-logo') or contains(@src, 'odoo_logo')]" position="replace">
+    <!-- Saver screen (sleep mode/screensaver): replace Odoo logo with POS brand logo when available -->
+    <t t-inherit="point_of_sale.SaverScreen" t-inherit-mode="extension">
+        <xpath expr="//img[@src='/web/static/img/odoo_logo.svg']" position="replace">
             <img t-if="brandLogo"
                  t-att-src="brandLogo"
-                 class="pos-lock-logo"/>
+                 t-att-height="env.isSmall ? 40 : 182"
+                 alt="Logo"/>
         </xpath>
     </t>
 

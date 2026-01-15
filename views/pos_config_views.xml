@@ -21,7 +21,7 @@
                     </div>
                 </setting>
                 <setting title="POS Branding"
-                         string="Branding & Logos"
+                         string="Branding &amp; Logos"
                          help="Hide Odoo branding and use a custom POS logo (header, customer screen, lock screen).">
                     <field name="hide_odoo_branding"/>
                     <div class="content-group mt16">
