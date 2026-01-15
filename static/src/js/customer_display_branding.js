@@ -2,7 +2,6 @@
 
 import { patch } from "@web/core/utils/patch";
 import { session } from "@web/session";
-import { CustomerDisplay } from "@point_of_sale/customer_display/customer_display";
 
 // Helper function to get config
 const getConfig = (component) => {
@@ -18,12 +17,17 @@ const getConfig = (component) => {
     return {};
 };
 
+// Import CustomerDisplay - if this fails, check browser console for import error
+import { CustomerDisplay } from "@point_of_sale/customer_display/customer_display";
+
+console.log("[CustomerDisplay] Module loaded, CustomerDisplay:", CustomerDisplay);
+
 // Patch CustomerDisplay
 patch(CustomerDisplay.prototype, {
     get brandLogo() {
         const config = getConfig(this);
         
-        console.log("[CustomerDisplay] Config:", {
+        console.log("[CustomerDisplay] brandLogo called, Config:", {
             hasEnv: !!this.env,
             hasEnvServices: !!this.env?.services?.pos,
             hasSession: !!this.session,
@@ -48,3 +52,5 @@ patch(CustomerDisplay.prototype, {
         return false;
     },
 });
+
+console.log("[CustomerDisplay] Successfully patched CustomerDisplay");

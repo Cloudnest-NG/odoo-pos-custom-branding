@@ -32,17 +32,6 @@ patch(SaverScreen.prototype, {
     get brandLogo() {
         const config = getConfig(this);
         
-        console.log("[SaverScreen] Config:", {
-            hasEnv: !!this.env,
-            hasEnvServices: !!this.env?.services?.pos,
-            hasPos: !!this.pos,
-            hasSession: !!this.session,
-            configKeys: Object.keys(config),
-            hideBranding: config.hide_odoo_branding,
-            hasBrandLogo: !!config.pos_brand_logo,
-            hasLogo: !!config.logo,
-        });
-        
         if (!config || Object.keys(config).length === 0) {
             return false;
         }
@@ -63,17 +52,6 @@ patch(SaverScreen.prototype, {
 patch(Navbar.prototype, {
     get brandLogo() {
         const config = getConfig(this);
-        
-        console.log("[Navbar] Config:", {
-            hasEnv: !!this.env,
-            hasEnvServices: !!this.env?.services?.pos,
-            hasPos: !!this.pos,
-            hasSession: !!this.session,
-            configKeys: Object.keys(config),
-            hideBranding: config.hide_odoo_branding,
-            hasBrandLogo: !!config.pos_brand_logo,
-            hasLogo: !!config.logo,
-        });
         
         if (!config || Object.keys(config).length === 0) {
             return false;
