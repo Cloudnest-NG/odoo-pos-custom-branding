@@ -41,16 +41,16 @@ import { useService } from "@web/core/utils/hooks";
         console.warn("Could not patch SaverScreen:", e);
     }
 
-    // POS header logo / branding
+    // POS navbar logo / branding
     try {
-        const { Header } = await import(
-            "@point_of_sale/app/header/header"
+        const { Navbar } = await import(
+            "@point_of_sale/app/navbar/navbar"
         );
 
-        patch(Header.prototype, {
+        patch(Navbar.prototype, {
             setup() {
                 super.setup(...arguments);
-                this.pos = useService("pos");
+                // this.pos is already set by usePos() in the original setup, no need to set it again
             },
             get brandLogo() {
                 const config = this.pos?.config || {};
@@ -65,17 +65,17 @@ import { useService } from "@web/core/utils/hooks";
             },
         });
     } catch (e) {
-        // Header component path/name may differ; ignore if not found.
-        console.warn("Could not patch Header:", e);
+        // Navbar component path/name may differ; ignore if not found.
+        console.warn("Could not patch Navbar:", e);
     }
 
     // Customer screen logo / branding
     try {
-        const { CustomerDisplayScreen } = await import(
-            "@point_of_sale/app/customer_display/customer_display_screen"
+        const { CustomerDisplay } = await import(
+            "@point_of_sale/customer_display/customer_display"
         );
 
-        patch(CustomerDisplayScreen.prototype, {
+        patch(CustomerDisplay.prototype, {
             setup() {
                 super.setup(...arguments);
                 this.pos = useService("pos");
@@ -94,6 +94,6 @@ import { useService } from "@web/core/utils/hooks";
         });
     } catch (e) {
         // Customer display is optional; ignore if not available.
-        console.warn("Could not patch CustomerDisplayScreen:", e);
+        console.warn("Could not patch CustomerDisplay:", e);
     }
 })();

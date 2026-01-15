@@ -11,24 +11,34 @@
         </xpath>
     </t>
 
-    <!-- POS header: use POS brand logo instead of default Odoo logo -->
-    <t t-inherit="point_of_sale.Header" t-inherit-mode="extension">
-        <xpath expr="//img[contains(@class, 'pos-header-logo') or contains(@src, 'odoo_logo')]" position="replace">
+    <!-- POS navbar: use POS brand logo instead of default Odoo logo -->
+    <t t-inherit="point_of_sale.Navbar" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('pos-centerheader')]//img[@src='/web/static/img/logo.png']" position="replace">
             <img t-if="brandLogo"
+                 class="pos-logo pos-logo mw-100"
+                 height="42"
+                 t-on-click="() => debug.toggleWidget()"
                  t-att-src="brandLogo"
-                 class="pos-header-logo"/>
+                 alt="Logo"/>
         </xpath>
     </t>
 
     <!-- Customer display: use POS brand logo and hide 'Powered by Odoo' text -->
-    <t t-inherit="point_of_sale.CustomerDisplayScreen" t-inherit-mode="extension">
-        <xpath expr="//img[contains(@class, 'pos-customer-logo') or contains(@src, 'odoo_logo')]" position="replace">
+    <t t-inherit="point_of_sale.CustomerDisplay" t-inherit-mode="extension">
+        <!-- Replace the company logo in sidebar with custom brand logo -->
+        <xpath expr="//div[hasclass('o_customer_display_logo')]//img" position="replace">
             <img t-if="brandLogo"
+                 class="img-fluid"
                  t-att-src="brandLogo"
-                 class="pos-customer-logo"/>
+                 alt="Logo"/>
         </xpath>
-        <xpath expr="//p[contains(., 'Powered by Odoo')]" position="replace">
-            <p t-if="false"/>
+        <!-- Hide "Powered by Odoo" in sidebar (large screens) - the div with position-absolute that contains "Powered by" -->
+        <xpath expr="//div[hasclass('position-absolute') and hasclass('bottom-0') and contains(., 'Powered by')]" position="replace">
+            <div t-if="false"/>
+        </xpath>
+        <!-- Hide "Powered by Odoo" at bottom of main display area - the div with "Powered by" text -->
+        <xpath expr="//div[hasclass('d-flex') and hasclass('justify-content-center')]/div[contains(., 'Powered by')]" position="replace">
+            <div t-if="false"/>
         </xpath>
     </t>
 
