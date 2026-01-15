@@ -2,6 +2,7 @@
 
 import { patch } from "@web/core/utils/patch";
 import { useService } from "@web/core/utils/hooks";
+import { session } from "@web/session";
 
 // Wrap all async imports in an async IIFE (Immediately Invoked Function Expression)
 (async () => {
@@ -27,7 +28,47 @@ import { useService } from "@web/core/utils/hooks";
                          * - Returns false to hide logo if hide_odoo_branding is enabled and no custom logo
                          */
                         get brandLogo() {
-                            const config = this.pos?.config || {};
+                            // Try multiple ways to get config (same approach as CustomerDisplay)
+                            let config = {};
+                            try {
+                                // Try env.services.pos.config first (recommended approach)
+                                if (this.env?.services?.pos?.config) {
+                                    config = this.env.services.pos.config;
+                                }
+                                // Fallback to pos.config
+                                else if (this.pos?.config) {
+                                    config = this.pos.config;
+                                }
+                                // Fallback to session.pos_config
+                                else if (this.session?.pos_config) {
+                                    config = this.session.pos_config;
+                                } else if (session?.pos_config) {
+                                    config = session.pos_config;
+                                } else {
+                                    return false;
+                                }
+                            } catch (e) {
+                                console.warn("[SaverScreen] Error accessing config:", e);
+                                return false;
+                            }
+                            
+                            // Log config for debugging
+                            console.log("[SaverScreen] Config:", {
+                                hasEnv: !!this.env,
+                                hasEnvServices: !!this.env?.services,
+                                hasEnvServicesPos: !!this.env?.services?.pos,
+                                hasPos: !!this.pos,
+                                hasSession: !!this.session,
+                                configKeys: Object.keys(config),
+                                hideBranding: config.hide_odoo_branding,
+                                hasBrandLogo: !!config.pos_brand_logo,
+                                hasLogo: !!config.logo,
+                            });
+                            
+                            if (!config || Object.keys(config).length === 0) {
+                                return false;
+                            }
+                            
                             if (config.hide_odoo_branding && !config.pos_brand_logo) {
                                 // Explicitly hide Odoo branding if requested and no custom logo is set
                                 return false;
@@ -71,7 +112,47 @@ import { useService } from "@web/core/utils/hooks";
                             // this.pos is already set by usePos() in the original setup, no need to set it again
                         },
                         get brandLogo() {
-                            const config = this.pos?.config || {};
+                            // Try multiple ways to get config (same approach as CustomerDisplay)
+                            let config = {};
+                            try {
+                                // Try env.services.pos.config first (recommended approach)
+                                if (this.env?.services?.pos?.config) {
+                                    config = this.env.services.pos.config;
+                                }
+                                // Fallback to pos.config
+                                else if (this.pos?.config) {
+                                    config = this.pos.config;
+                                }
+                                // Fallback to session.pos_config
+                                else if (this.session?.pos_config) {
+                                    config = this.session.pos_config;
+                                } else if (session?.pos_config) {
+                                    config = session.pos_config;
+                                } else {
+                                    return false;
+                                }
+                            } catch (e) {
+                                console.warn("[Navbar] Error accessing config:", e);
+                                return false;
+                            }
+                            
+                            // Log config for debugging
+                            console.log("[Navbar] Config:", {
+                                hasEnv: !!this.env,
+                                hasEnvServices: !!this.env?.services,
+                                hasEnvServicesPos: !!this.env?.services?.pos,
+                                hasPos: !!this.pos,
+                                hasSession: !!this.session,
+                                configKeys: Object.keys(config),
+                                hideBranding: config.hide_odoo_branding,
+                                hasBrandLogo: !!config.pos_brand_logo,
+                                hasLogo: !!config.logo,
+                            });
+                            
+                            if (!config || Object.keys(config).length === 0) {
+                                return false;
+                            }
+                            
                             if (config.hide_odoo_branding && !config.pos_brand_logo) {
                                 return false;
                             }
