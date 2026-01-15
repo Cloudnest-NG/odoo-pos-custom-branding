@@ -50,15 +50,3 @@ class PosSession(models.Model):
     def _get_pos_ui_pos_receipt(self, params):
         """Used to Return the params value to the pos Receipts"""
         return self.env['pos.receipt'].search_read(**params['search_params'])
-
-    def _loader_params_pos_config(self):
-        """Override to include custom branding fields in POS config loader"""
-        result = super()._loader_params_pos_config()
-        # Add custom branding fields to the fields list
-        if 'fields' in result.get('search_params', {}):
-            fields_list = result['search_params']['fields']
-            if 'hide_odoo_branding' not in fields_list:
-                fields_list.append('hide_odoo_branding')
-            if 'pos_brand_logo' not in fields_list:
-                fields_list.append('pos_brand_logo')
-        return result

@@ -1,59 +1,94 @@
 /** @odoo-module */
 
 import { patch } from "@web/core/utils/patch";
-import { useService } from "@web/core/utils/hooks";
+import { session } from "@web/session";
 
 // Customer display logo / branding (separate asset bundle)
+// Since direct import fails, we'll patch CustomerDisplay when it becomes available via registry
 (async () => {
     try {
-        const { CustomerDisplay } = await import(
-            "@point_of_sale/customer_display/customer_display"
-        );
-
-        patch(CustomerDisplay.prototype, {
-            setup() {
-                super.setup(...arguments);
-                // Get pos service to access config (Odoo 18 pattern)
-                this.pos = useService("pos");
-            },
-            /**
-             * Returns the logo that should be displayed on the customer display screen.
-             * - Custom POS logo if configured in pos_brand_logo
-             * - Falls back to company logo if no custom logo
-             * - Returns false to hide logo if hide_odoo_branding is enabled and no custom logo
-             */
-            get brandLogo() {
-                // Try multiple ways to access config (Odoo 18 compatibility)
-                const config = this.pos?.config || {};
-                const envConfig = this.env?.services?.pos?.config || {};
-                
-                // Console logging for debugging
-                console.log("[CustomerDisplay] Config access:", {
-                    hasPos: !!this.pos,
-                    hasConfig: !!this.pos?.config,
-                    hasEnvServices: !!this.env?.services?.pos?.config,
-                    configKeys: Object.keys(config),
-                    hideBranding: config.hide_odoo_branding,
-                    hasBrandLogo: !!config.pos_brand_logo,
-                    hasLogo: !!config.logo,
-                });
-                
-                if (config.hide_odoo_branding && !config.pos_brand_logo) {
-                    // Explicitly hide Odoo branding if requested and no custom logo is set
-                    return false;
-                }
-                
-                // Try custom brand logo first, then regular logo, then env fallback
-                let logo = config.pos_brand_logo || config.logo || envConfig.logo;
-                
-                // Format binary data as data URI for use in img src
-                if (logo) {
-                    return `data:image/png;base64,${logo}`;
-                }
+        const { registry } = await import("@web/core/registry");
+        
+        // Function to patch CustomerDisplay
+        const patchCustomerDisplay = (CustomerDisplay) => {
+            if (!CustomerDisplay) {
                 return false;
-            },
-        });
+            }
+            
+            try {
+                patch(CustomerDisplay.prototype, {
+                    /**
+                     * Returns the logo that should be displayed on the customer display screen.
+                     * - Custom POS logo if configured in pos_brand_logo
+                     * - Falls back to company logo if no custom logo
+                     * - Returns false to hide logo if hide_odoo_branding is enabled and no custom logo
+                     */
+                    get brandLogo() {
+                        // Get config from session - customer display loads config through session
+                        let config = {};
+                        try {
+                            // Try to get config from session.pos_config (loaded from backend)
+                            if (this.session?.pos_config) {
+                                config = this.session.pos_config;
+                            } else if (session?.pos_config) {
+                                config = session.pos_config;
+                            } else {
+                                return false;
+                            }
+                        } catch (e) {
+                            return false;
+                        }
+                        
+                        if (!config || Object.keys(config).length === 0) {
+                            return false;
+                        }
+                        
+                        if (config.hide_odoo_branding && !config.pos_brand_logo) {
+                            return false;
+                        }
+                        const logo = config.pos_brand_logo || config.logo;
+                        if (logo) {
+                            return `data:image/png;base64,${logo}`;
+                        }
+                        return false;
+                    },
+                });
+                return true;
+            } catch (e) {
+                console.warn("Error patching CustomerDisplay:", e);
+                return false;
+            }
+        };
+        
+        // Try to find CustomerDisplay in registry with retries
+        const tryPatch = () => {
+            try {
+                // CustomerDisplay might be registered in pos_screens or another category
+                const posScreens = registry.category("pos_screens");
+                const CustomerDisplay = posScreens.get("CustomerDisplay");
+                
+                if (CustomerDisplay) {
+                    return patchCustomerDisplay(CustomerDisplay);
+                }
+            } catch (e) {
+                // Not found or error
+            }
+            return false;
+        };
+        
+        // Try immediately
+        if (!tryPatch()) {
+            // Retry with delays - component might not be registered yet
+            setTimeout(() => {
+                if (!tryPatch()) {
+                    setTimeout(() => {
+                        tryPatch();
+                    }, 500);
+                }
+            }, 100);
+        }
+        
     } catch (e) {
-        console.warn("Could not patch CustomerDisplay:", e);
+        console.warn("Could not set up CustomerDisplay patching:", e);
     }
 })();
