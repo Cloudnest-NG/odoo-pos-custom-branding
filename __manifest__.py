@@ -21,7 +21,8 @@
 #
 ################################################################################
 {
-    'name': 'Odoo POS Custom Branding', 'version': '18.0.1.0.5',
+    'name': 'Odoo POS Custom Branding',
+    'version': '18.0.1.0.5',
     'category': 'Point of Sale',
     'live_test_url': 'https://www.youtube.com/watch?v=sHQUam5F5Qs',
     'summary': "POS Custom Branding, Remove Odoo Branding, Custom POS Logo, "
