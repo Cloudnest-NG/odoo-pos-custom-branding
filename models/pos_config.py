@@ -58,3 +58,18 @@ class PosConfig(models.Model):
         result['hide_odoo_branding'] = self.hide_odoo_branding
         result['pos_brand_logo'] = self.pos_brand_logo
         return result
+
+    def read(self, fields=None, load='_classic_read'):
+        """Override to include custom branding fields when config is read"""
+        result = super().read(fields=fields, load=load)
+        
+        # If reading all fields or our custom fields are requested, include them
+        if fields is None or 'hide_odoo_branding' in fields or 'pos_brand_logo' in fields:
+            for i, record in enumerate(result):
+                config_record = self.browse(record['id'])
+                if fields is None or 'hide_odoo_branding' in fields:
+                    record['hide_odoo_branding'] = config_record.hide_odoo_branding
+                if fields is None or 'pos_brand_logo' in fields:
+                    record['pos_brand_logo'] = config_record.pos_brand_logo
+        
+        return result

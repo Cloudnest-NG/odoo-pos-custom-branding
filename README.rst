@@ -1,41 +1,54 @@
-.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
-    :target: https://www.gnu.org/licenses/agpl-3.0-standalone.html
-    :alt: License: AGPL-3
+Odoo POS Custom Branding
+========================
 
-POS Receipt Design
-==================
-Option to select the customised Receipts for each POS
+Remove all generic Odoo branding from your Point of Sale and replace it with
+your own professional brand. This module targets **Odoo 18 Community** and
+extends the POS to let you manage custom logos and branding per POS
+configuration.
+
+Main Features
+-------------
+
+* Custom POS logo per POS configuration.
+* Remove \"Powered by Odoo\" from POS receipts.
+* Replace default Odoo logo in the POS navbar/header.
+* Replace Odoo logo on the saver / sleep screen.
+* Replace the logo and hide \"Powered by Odoo\" text on the customer display
+  (customer-facing screen).
+* Per-POS settings for:
+
+  * ``Hide Odoo Branding`` boolean.
+  * ``POS Brand Logo`` image used in header, saver screen and customer display.
+
+Configuration
+-------------
+
+1. Go to :menuselection:`Point of Sale --> Configuration --> Point of Sale`.
+2. Open a POS configuration.
+3. In the **Branding & Logos** section:
+
+   * Enable **Hide Odoo Branding** if you want to remove Odoo logos/text.
+   * Upload an image in **POS Brand Logo** to use as the POS logo.
+
+4. Save the configuration and start a POS session to see the changes.
 
 Company
 -------
-* `Cybrosys Techno Solutions <https://cybrosys.com/>`__
 
-Credits
+* `Axiom Cloudnest Technologies (CloudNest) <https://www.cloudnest.com.ng>`__
+
+CloudNest delivers enterprise cloud, ERP and AI solutions for African businesses,
+with focus on Nigeria and West Africa.
+
+Support
 -------
-Developer:  (V14) Syamili K,
-            (V15) Sajna Sherin T,
-            (V16 & V17) Sadique Kottekkat
-            (V18) Sreerag PM
-Contact: odoo@cybrosys.com
 
-Contacts
---------
-* Mail Contact : odoo@cybrosys.com
-* Website : https://cybrosys.com
-
-Bug Tracker
------------
-Bugs are tracked on GitHub Issues. In case of trouble, please check there if your issue has already been reported.
-
-Maintainer
-==========
-.. image:: https://cybrosys.com/images/logo.png
-   :target: https://cybrosys.com
-
-This module is maintained by Cybrosys Technologies.
-
-For support and more information, please visit `Our Website <https://cybrosys.com/>`__
+* **Email:** support@cloudnest.com.ng
+* **Phone:** +234 8138682705
+* **WhatsApp:** https://wa.me/message/SLIFHU4GCIRGC1
+* **Website:** https://www.cloudnest.com.ng
 
 Further information
 ===================
-HTML Description: `<static/description/index.html>`__
+
+* HTML Description: `<static/description/index.html>`__
